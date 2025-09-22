@@ -1,0 +1,20 @@
+@startuml
+title Диаграмма Теплый дом
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "Пользователь", "Пользователь системы Тёплый дом")
+Person(admin, "Специалист по подключению", "Специалист настраивающий систему")
+System(WarmHouse, "Система Теплый дом", "Система-монолит для управления отоплением")
+
+System_Ext(sensorApi, "API датчиков температуры", "Внешнее API состояния датчиков")
+System_Ext(sensorStateUpdate, "Система обновления датчиков", "Обновление значения/статуса датчиков")
+
+Rel(user, WarmHouse, "Использование системы")
+Rel(admin,WarmHouse, "Подключение/отключение устройств")
+Rel(WarmHouse,sensorApi,"Получение текущего состояния")
+Rel(sensorStateUpdate,WarmHouse,"Получение актуального состояния из БД")
+
+@enduml
