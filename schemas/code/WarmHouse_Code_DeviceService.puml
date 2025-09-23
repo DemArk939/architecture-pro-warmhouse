@@ -1,0 +1,63 @@
+@startuml
+title Теплый дом МС управления устройствами Сервис команд и устройств Уровень кода
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+class Device {
+  +UUID id
+  +String deviceType
+  +UUID houseId
+  +String serialNumber
+  +String status
+  +boolean isActive
+  +String url
+}
+
+class Command {
+  +UUID id
+  +UUID deviceId
+  +String commandType
+  +Map<String,String> parameters
+}
+
+class DeviceLogicService {
+  +void addDevice(Device d)
+  +void editDevice(Device d)
+  +void getDevice(UUID id)
+  +void removeDevice(Device d)
+}
+
+class CommandLogicService {
+  -List<CommandExecutorStrategy> strategies;
+  +void executeCommand(Command d)
+  -void checkCommand(Command d)
+  -void checkDevice(Command d)
+  -void addCommand(Command d)
+}
+
+interface CommandExecutorStrategy {
+  +void execute(Command d)
+}
+
+class TemperatureCommandExecutorStrategy {
+  +void execute(Command d)
+}
+
+class LightCommandExecutorStrategy {
+  +void execute(Command d)
+}
+
+class DoorCommandExecutorStrategy {
+  +void execute(Command d)
+}
+
+CommandLogicService "1" -- "1..*" CommandExecutorStrategy : has
+CommandExecutorStrategy <- TemperatureCommandExecutorStrategy : implements
+CommandExecutorStrategy <- LightCommandExecutorStrategy : implements
+CommandExecutorStrategy <- DoorCommandExecutorStrategy : implements
+
+CommandLogicService -> DeviceLogicService : getDevice(deviceId)
+
+@enduml
