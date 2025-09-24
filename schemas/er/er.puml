@@ -1,0 +1,89 @@
+@startuml
+title Теплый дом ER-диаграмма
+
+top to bottom direction
+
+entity User {
+    *id: UUID
+    ---
+    login: text
+    name: text
+    surname: text
+    email: text
+    telephone_number: text
+}
+
+entity House {
+    *id: UUID
+    ---
+    user_id: UUID
+    address: text
+    name: text
+}
+
+entity House_Location {
+    *id: UUID
+    ---
+    house_id: UUID
+    user_id: UUID
+    name: text
+}
+
+entity Device {
+    *id: UUID
+    ---
+    device_type: text
+    house_id: UUID
+    location_id: UUID
+    user_id: UUID
+    serial_number: text
+    status: text
+    is_active: boolean
+    url: text
+}
+
+entity Device_Type {
+    *code: text
+    ---
+    name: text
+}
+
+entity Command {
+    *id: UUID
+    ---
+    device_id: UUID
+    user_id: UUID
+    command_Type: text
+    parameters: json
+    command_type: text
+    status: text
+    command_date: timestamp
+}
+
+entity Command_Type {
+    *code: text
+    ---
+    name: text
+}
+
+entity Telemetry_Data {
+    *id: UUID
+    ---
+    device_id: UUID
+    status: text
+    parameters: json
+}
+
+
+User "1" *-- "0..*" House
+House "1" *-- "0..*" House_Location
+House_Location "1" *-- "0..*" Device
+House "1" *-- "0..*" Device
+User "1" *-- "0..*" Device
+User "1" *-- "0..*" Command
+Device "1" -- "1" Device_Type
+Device "1" *-- "0..*" Command
+Device "1" *-- "0..*" Telemetry_Data
+Command "1" -- "1" Command_Type
+
+@enduml
