@@ -1,0 +1,175 @@
+openapi: 3.0.4
+info:
+  title: SmartHome API
+  version: 1.0.0
+paths:
+  /device:
+    post:
+      tags:
+        - device
+      summary: Add a new device.
+      operationId: addDevice
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid input
+        '500':
+          description: Server error
+    put:
+      tags:
+        - device
+      summary: Update an existing device by Id.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '404':
+          description: Device not found
+        '500':
+          description: Server error
+  /device/{deviceId}:
+    get:
+      tags:
+        - device
+      summary: Find device by ID.
+      operationId: getDeviceById
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Device not found
+        '500':
+          description: Server error
+    delete:
+      tags:
+        - device
+      operationId: deleteDevice
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Device deleted
+        '404':
+          description: Device not found
+        '500':
+          description: Server error
+  /device/{userId}:
+    get:
+      tags:
+        - device
+      summary: Find device by user ID.
+      operationId: getDeviceByUserId
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Device not found
+        '500':
+          description: Server error
+components:
+  schemas:
+    Device:
+      required:
+        - id
+        - houseId
+        - locationId
+        - userId
+        - serialNumber
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 4952d3a8-043a-4f06-805d-f3cf315853f0
+        deviceType:
+          type: string
+          example: temperature
+        houseId:
+          type: string
+          format: uuid
+          example: 4952d3a8-043a-4f06-805d-f3cf315853f1
+        locationId:
+          type: string
+          format: uuid
+          example: 4952d3a8-043a-4f06-805d-f3cf315853f2
+        userId:
+          type: string
+          format: uuid
+          example: 4952d3a8-043a-4f06-805d-f3cf315853f3
+        serialNumber:
+          type: string
+          example: 0000011111qwe
+        status:
+          type: string
+          example: enable
+        isActive:
+          type: boolean
+          example: true
+        url:
+          type: string
+          example: http://27.0.0.1:8000/device/4952d3a8-043a-4f06-805d-f3cf315853f0
+
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - success
+            - error
+        message:
+          type: string
+          example: Success response
