@@ -1,0 +1,97 @@
+openapi: 3.0.4
+info:
+  title: SmartHome Command API
+  version: 1.0.0
+paths:
+  /command:
+    post:
+      tags:
+        - command
+      summary: Add a new command.
+      operationId: addCommand
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Command'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid input
+        '500':
+          description: Server error
+  /command/{deviceId}:
+    get:
+      tags:
+        - device
+      summary: Find command by DeviceID.
+      operationId: getCommandsByDeviceId
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Command'
+        '400':
+          description: Invalid input
+        '404':
+          description: Command not found
+        '500':
+          description: Server error
+components:
+  schemas:
+    Command:
+      required:
+        - deviceId
+        - userId
+        - commandType
+        - commandDate
+      type: object
+      properties:
+        deviceId:
+          type: string
+          format: uuid
+          example: 4952d3a8-043a-4f06-805d-f3cf315853f1
+        userId:
+          type: string
+          format: uuid
+          example: 4952d3a8-043a-4f06-805d-f3cf315853f3
+        commandType:
+          type: string
+          example: TURN_OFF
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+          example: { "parameter1": "value1",
+                     "parameter2": "value2" }
+        commandDate:
+          type: string
+          format: date-time
+          example: 2025-08-15T12:34:56.789+03:00
+
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - success
+            - error
+        message:
+          type: string
+          example: Success response

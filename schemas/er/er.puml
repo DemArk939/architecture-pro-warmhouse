@@ -53,7 +53,6 @@ entity Command {
     ---
     device_id: UUID
     user_id: UUID
-    command_Type: text
     parameters: json
     command_type: text
     status: text
@@ -72,6 +71,7 @@ entity Telemetry_Data {
     device_id: UUID
     status: text
     parameters: json
+    telemetry_date: timestamp
 }
 
 

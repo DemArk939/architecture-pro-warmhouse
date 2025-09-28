@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["deviceId", "status"],
+  "properties": {
+    "deviceId": {
+      "type": "string",
+      "format": "uuid",
+      "example": "4952d3a8-043a-4f06-805d-f3cf315853f1"
+    },
+    "status": {
+      "type": "string",
+      "example": "TURN_OFF"
+    },
+    "parameters": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {"parameter1": "value1"}
+    },
+    "telemetryDate": {
+      "type": "string",
+      "format": "date-time",
+      "example": "2025-08-15T12:34:56.789+03:00"
+    }
+  }
+}
