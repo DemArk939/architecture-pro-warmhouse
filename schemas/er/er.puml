@@ -4,7 +4,7 @@ title Теплый дом ER-диаграмма
 top to bottom direction
 
 entity User {
-    *id: UUID
+    *id: integer
     ---
     login: text
     name: text
@@ -14,28 +14,28 @@ entity User {
 }
 
 entity House {
-    *id: UUID
+    *id: integer
     ---
-    user_id: UUID
+    user_id: integer
     address: text
     name: text
 }
 
 entity House_Location {
-    *id: UUID
+    *id: integer
     ---
-    house_id: UUID
-    user_id: UUID
+    house_id: integer
+    user_id: integer
     name: text
 }
 
 entity Device {
-    *id: UUID
+    *id: integer
     ---
     device_type: text
-    house_id: UUID
-    location_id: UUID
-    user_id: UUID
+    house_id: integer
+    location_id: integer
+    user_id: integer
     serial_number: text
     status: text
     is_active: boolean
@@ -49,10 +49,10 @@ entity Device_Type {
 }
 
 entity Command {
-    *id: UUID
+    *id: integer
     ---
-    device_id: UUID
-    user_id: UUID
+    device_id: integer
+    user_id: integer
     parameters: json
     command_type: text
     status: text
@@ -66,9 +66,9 @@ entity Command_Type {
 }
 
 entity Telemetry_Data {
-    *id: UUID
+    *id: integer
     ---
-    device_id: UUID
+    device_id: integer
     status: text
     parameters: json
     telemetry_date: timestamp

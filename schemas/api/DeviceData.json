@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Device",
+  "type": "object",
+  "required": [
+    "id",
+    "houseId",
+    "locationId",
+    "userId",
+    "serialNumber"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "example": 123
+    },
+    "deviceType": {
+      "type": "string",
+      "example": "temperature"
+    },
+    "houseId": {
+      "type": "integer",
+      "example": 123
+    },
+    "locationId": {
+      "type": "integer",
+      "example": 123
+    },
+    "userId": {
+      "type": "integer",
+      "example": 123
+    },
+    "serialNumber": {
+      "type": "string",
+      "example": "0000011111qwe"
+    },
+    "status": {
+      "type": "string",
+      "example": "enable"
+    },
+    "isActive": {
+      "type": "boolean",
+      "example": true
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "example": "http://27.0.0.1:8000/device/4952d3a8-043a-4f06-805d-f3cf315853f0"
+    }
+  }
+}

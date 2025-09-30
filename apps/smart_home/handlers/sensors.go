@@ -18,13 +18,20 @@ import (
 type SensorHandler struct {
 	DB                 *db.DB
 	TemperatureService *services.TemperatureService
+	DeviceService      *services.DeviceService
+	TelemetryService   *services.TelemetryService
 }
 
 // NewSensorHandler creates a new SensorHandler
-func NewSensorHandler(db *db.DB, temperatureService *services.TemperatureService) *SensorHandler {
+func NewSensorHandler(db *db.DB,
+	temperatureService *services.TemperatureService,
+	deviceService *services.DeviceService,
+	telemetryService *services.TelemetryService) *SensorHandler {
 	return &SensorHandler{
 		DB:                 db,
 		TemperatureService: temperatureService,
+		DeviceService:      deviceService,
+		TelemetryService:   telemetryService,
 	}
 }
 
@@ -137,6 +144,23 @@ func (h *SensorHandler) CreateSensor(c *gin.Context) {
 	}
 
 	sensor, err := h.DB.CreateSensor(context.Background(), sensorCreate)
+
+	resp, err := h.DeviceService.AddDevice(sensor)
+	if err != nil {
+		log.Fatalf("Ошибка при добавлении устройства в DeviceService: %v", err)
+	} else {
+		// Обрабатываем успешный ответ
+		log.Printf("Устройство успешно добавлено. Ответ сервера: %+v", resp)
+	}
+
+	respT, err := h.TelemetryService.AddTelemetry(sensor)
+	if err != nil {
+		log.Fatalf("Ошибка при добавлении телеметрии в TelemetryService: %v", err)
+	} else {
+		// Обрабатываем успешный ответ
+		log.Printf("Денные телеметрии успешно добавлены. Ответ сервера: %+v", respT)
+	}
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

@@ -35,6 +35,16 @@ func main() {
 	// Initialize router
 	router := gin.Default()
 
+	//init DeviceService
+	deviceAPIURL := getEnv("DEVICE_API_URL", "http://device-service:8085")
+	deviceService := services.NewDeviceService(deviceAPIURL)
+	log.Printf("Device service initialized with API URL: %s\n", deviceAPIURL)
+
+	//init TelemetryService
+	telemetryAPIURL := getEnv("TELEMETRY_API_URL", "http://telemetry-service:8086")
+	telemetryService := services.NewTelemetryService(telemetryAPIURL)
+	log.Printf("TelemetryService initialized with API URL: %s\n", telemetryAPIURL)
+
 	// Health check endpoint
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
@@ -46,7 +56,7 @@ func main() {
 	apiRoutes := router.Group("/api/v1")
 
 	// Register sensor routes
-	sensorHandler := handlers.NewSensorHandler(database, temperatureService)
+	sensorHandler := handlers.NewSensorHandler(database, temperatureService, deviceService, telemetryService)
 	sensorHandler.RegisterRoutes(apiRoutes)
 
 	// Start server
