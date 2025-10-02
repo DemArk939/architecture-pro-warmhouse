@@ -185,3 +185,4 @@
 
 Файл docker-compose расположен - config/docker-compose.yml 
 Докер файлы Мс расположены в соответствующих директориях с микросервисами.
+Для проверки МС также можно воспользоваться файлом с коллекциями apps/microservices.postman_collection.json

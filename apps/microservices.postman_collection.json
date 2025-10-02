@@ -1,0 +1,168 @@
+{
+  "info": {
+    "_postman_id": "f8e3a123-4567-89ab-cdef-0123456789ab",
+    "name": "Smart Home MS API",
+    "description": "A collection for testing the Smart Home MS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Device",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 234,\n  \"deviceType\": \"temperature\",\n  \"houseId\": 234,\n  \"locationId\": 234,\n  \"userId\": 234,\n  \"serialNumber\": \"0000011111qwe\",\n  \"status\": \"enable\",\n  \"isActive\": false,\n  \"url\": \"http://27.0.0.1:8000/device/4952d3a8-043a-4f06-805d-f3cf315853f0\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8085/device",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8085",
+          "path": [
+            "device"
+          ]
+        },
+        "description": "Create a new device"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Device by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8085/device/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8085",
+          "path": [
+            "device",
+            "1"
+          ]
+        },
+        "description": "Retrieve a specific device by ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Telemetry",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 12,\n  \"deviceId\": 123,\n  \"status\": \"status\",\n  \"parameters\": {\n    \"key\": \"value\",\n    \"key2\": \"value2\"\n  },\n  \"telemetryDate\": \"\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8086/telemetry",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8086",
+          "path": [
+            "telemetry"
+          ]
+        },
+        "description": "Create a new Telemetry"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Telemetry by device ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8086/telemetry/123",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8086",
+          "path": [
+            "telemetry",
+            "123"
+          ]
+        },
+        "description": "Retrieve a specific Telemetry by device ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Sensor into monolit",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Living Room Temperature\",\n    \"type\": \"temperature\",\n    \"location\": \"Living Room\",\n    \"unit\": \"°C\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/sensors",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "sensors"
+          ]
+        },
+        "description": "Create a new sensor, device and telemetry"
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+}
