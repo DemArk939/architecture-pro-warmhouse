@@ -1,0 +1,91 @@
+openapi: 3.0.4
+info:
+  title: SmartHome Telemetry API
+  version: 1.0.0
+paths:
+  /telemetry/{deviceId}:
+    get:
+      tags:
+        - telemetry
+      summary: Find telemetry by DeviceID.
+      operationId: getTelemetryByDeviceId
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Telemetry'
+        '400':
+          description: Invalid input
+        '404':
+          description: Device not found
+        '500':
+          description: Server error
+  /telemetry:
+    post:
+      tags:
+        - telemetry
+      summary: Add a new telemetry.
+      operationId: addTelemetry
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Telemetry'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid input
+        '500':
+          description: Server error
+components:
+  schemas:
+    Telemetry:
+      required:
+        - deviceId
+        - status
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        deviceId:
+          type: integer
+          example: 123
+        status:
+          type: string
+          example: TURN_OFF
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+          example: { "parameter1": "value1" }
+        telemetryDate:
+          type: string
+          format: date-time
+          example: 2025-08-15T12:34:56.789+03:00
+
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - success
+            - error
+        message:
+          type: string
+          example: Success response

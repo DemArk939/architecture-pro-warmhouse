@@ -1,0 +1,40 @@
+@startuml
+title Тёплый дом Уровень контейнеров
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "Пользователь", "Пользователь системы Тёплый дом")
+Person(device, "Устройство", "Работающее устройство")
+System(WarmHouse, "Система Теплый дом", "Система управления и мониторинга устройств")
+
+Container_Boundary(WarmHouse, "Система Теплый дом") {
+  Container(UserController, "МС подключения пользователя", "Java, Spring", "Подключение пользователей к системе")
+  Container(DeviceController, "МС подключения устройств", "Java, Spring", "Передача данных от устройств")
+  Container(UserService, "МС для работы с пользовательскими данными", "Java, Spring", "Пользователи, дома, устройства")
+  Container(DeviceService, "МС управления устройствами", "Java, Spring", "Добавление, изменение, удаление устройств")
+  Container(TelemetryService, "МС телеметрии устройств", "Java, Spring", "Запрос/получение телеметрии устройств")
+  ContainerDb(UserDatabase, "База Данных Пользователя", "PostgreSQL", "Информация домов и пользовательских данных")
+  ContainerDb(DeviceDatabase, "База Данных Устройств", "PostgreSQL", "Хранение информации о устройствах")
+  ContainerDb(TelemetryDatabase, "База Данных Телеметрии", "PostgreSQL", "Хранение информации о телеметрии")
+  ContainerQueue(TelemetryBroker, "Брокер сообщений", "Kafka")
+  ContainerQueue(DeviceBroker, "Брокер сообщений", "Kafka")
+
+}
+
+Rel(user, UserController, "Использование системы")
+Rel(device, DeviceController, "Передача телеметрии")
+Rel(DeviceController, TelemetryBroker, "Добавление телеметрии")
+Rel(TelemetryBroker, TelemetryService, "Добавление телеметрии")
+Rel(TelemetryBroker, DeviceService, "Обновление статуса устройства")
+Rel(UserController, UserService, "Добавление устройств/получение телеметрии")
+Rel(UserService,UserDatabase,"Чтение/запись пользовательских данных")
+Rel(UserController,DeviceService,"Управления устройствами")
+Rel(UserController,TelemetryService,"Получение состояния устройств")
+Rel(DeviceService,DeviceDatabase,"Чтение/запись данных об устройствах")
+Rel(DeviceService,device,"Управление устройством")
+Rel(DeviceService,DeviceBroker,"Добавление/удаление устройства")
+Rel(DeviceBroker,TelemetryService,"Добавление/удаление устройства")
+Rel(TelemetryService,TelemetryDatabase,"Чтение/запись телеметрии устройств")
+@enduml

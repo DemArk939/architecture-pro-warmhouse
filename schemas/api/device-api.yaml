@@ -1,0 +1,243 @@
+openapi: 3.0.4
+info:
+  title: SmartHome Device API
+  version: 1.0.0
+paths:
+  /device:
+    post:
+      tags:
+        - device
+      summary: Add a new device.
+      operationId: addDevice
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid input
+        '500':
+          description: Server error
+    put:
+      tags:
+        - device
+      summary: Update an existing device by Id.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '404':
+          description: Device not found
+        '500':
+          description: Server error
+  /device/{deviceId}:
+    get:
+      tags:
+        - device
+      summary: Find device by ID.
+      operationId: getDeviceById
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Device not found
+        '500':
+          description: Server error
+    delete:
+      tags:
+        - device
+      operationId: deleteDevice
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Device deleted
+        '404':
+          description: Device not found
+        '500':
+          description: Server error
+  /device/userId/{userId}:
+    get:
+      tags:
+        - device
+      summary: Find device by user ID.
+      operationId: getDeviceByUserId
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Device not found
+        '500':
+          description: Server error
+  /command:
+    post:
+      tags:
+        - command
+      summary: Add a new command.
+      operationId: addCommand
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Command'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid input
+        '500':
+          description: Server error
+  /command/{deviceId}:
+    get:
+      tags:
+        - command
+      summary: Find command by DeviceID.
+      operationId: getCommandsByDeviceId
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Command'
+        '400':
+          description: Invalid input
+        '404':
+          description: Command not found
+        '500':
+          description: Server error
+components:
+  schemas:
+    Device:
+      required:
+        - id
+        - houseId
+        - locationId
+        - userId
+        - serialNumber
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        deviceType:
+          type: string
+          example: temperature
+        houseId:
+          type: integer
+          example: 123
+        locationId:
+          type: integer
+          example: 123
+        userId:
+          type: integer
+          example: 123
+        serialNumber:
+          type: string
+          example: 0000011111qwe
+        status:
+          type: string
+          example: enable
+        isActive:
+          type: boolean
+          example: true
+        url:
+          type: string
+          example: http://27.0.0.1:8000/device/4952d3a8-043a-4f06-805d-f3cf315853f0
+    Command:
+      required:
+        - deviceId
+        - userId
+        - commandType
+        - commandDate
+      type: object
+      properties:
+        deviceId:
+          type: integer
+          example: 123
+        userId:
+          type: integer
+          example: 123
+        commandType:
+          type: string
+          example: TURN_OFF
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+          example: { "parameter1": "value1",
+                     "parameter2": "value2" }
+        commandDate:
+          type: string
+          format: date-time
+          example: 2025-08-15T12:34:56.789+03:00
+
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - success
+            - error
+        message:
+          type: string
+          example: Success response

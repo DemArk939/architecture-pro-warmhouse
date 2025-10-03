@@ -1,0 +1,36 @@
+@startuml
+title Теплый дом МС управления устройствами Уровень компонентов
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(device, "Устройство", "Работающее устройство")
+
+Container_Boundary(WarmHouse, "Система Теплый дом") {
+  Container(DeviceService, "МС управления устройствами", "Java, Spring", "Добавление, изменение, управление, удаление устройств")
+  Container(DeviceDatabase, "База Данных Устройств", "PostgreSQL", "Хранение информации об устройствах")
+}
+
+Container(DeviceService, "МС управления устройствами", "Java, Spring") {
+  Component(DeviceController, "Контроллер Управления Устройствами", "Component: Rest Controller", "Получение запросов на добавление, удаление, изменение")
+  Component(CommandController, "Контроллер Команд", "Component: Rest Controller", "Получение команд для устройства")
+  Component(TelemetryConsumer, "Слушатель изменения телеметрии", "Component: Kafka consumer", "Получение запросов изменения телеметрии")
+  Component(DeviceLogicService, "Сервис работы с Устройствами", "Component: Spring Boot", "Логика работы с устройствами")
+  Component(CommandLogicService, "Сервис команд", "Component: Spring Boot", "Логика работы с командами, выполнение команд устройством")
+  Component(DeviceRepository, "Репозиторий устройств", "Component: Spring Boot", "Взаимодействие с БД")
+  Component(CommandRepository, "Репозиторий команд", "Component: Spring Boot", "Взаимодействие с БД")
+}
+
+Rel(DeviceController,DeviceLogicService,"Вызов функций")
+Rel(DeviceLogicService,DeviceRepository,"Вызов функций")
+Rel(DeviceRepository,DeviceDatabase,"Чтение/запись данных")
+
+Rel(CommandController,CommandLogicService,"Вызов функций")
+Rel(CommandLogicService,DeviceLogicService,"Получение данных об устройстве")
+Rel(CommandLogicService,CommandRepository,"Получение данных об устройстве")
+Rel(CommandRepository,DeviceDatabase,"Чтение/запись данных")
+Rel(CommandLogicService,device,"Отправить команду")
+
+Rel(TelemetryConsumer,DeviceLogicService,"Передача данных для обновления")
+@enduml
